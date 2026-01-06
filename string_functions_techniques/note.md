@@ -149,3 +149,9 @@ Read a whole line and replace the newline character with a null character, or re
 > 1. If it encounters the input that does not fit the buffer, it keeps silent and user will not be informed.
 > 
 > 2. It doesn't cope with the misuse situation such as setting n as 1 or less.
+
+## 4. scanf()
+
+Definition ? Usage or bahavior? Note ? I think I do not need to repeat these content anymore. We are all familiar with this famous input function. I think I just need to present something we ought to note.
+
+**Comment:** **scanf()** uses *%s* format specifier to indicate it would like to read a string. BUT, rather than read a whole string line, it prefers to read a single word. It will start at the first non-space character and terminate at the first whitespace character it encounters (not including that whitespace character !!!). Also, if we indicates the field width such as *%5s*. Then it will just read the first 5 characters in the string or it will ends when it meets whitespace character, it depends on which comes first.
