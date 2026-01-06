@@ -1,9 +1,9 @@
 
-main.out: main.o
-	cc -o main.out main.o
+s_gets.out: s_gets.o
+	cc -o s_gets.out s_gets.o
 
-main.o: main.c
-	cc -o main.o -c main.c
+s_gets.o: s_gets.c
+	cc -o s_gets.o -c s_gets.c
 
 clean:
 	rm *.o

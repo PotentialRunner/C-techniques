@@ -69,9 +69,9 @@ Note that this function is a bit different from **gets()** which discards the ne
 > 
 > ```c
 >  #include <stdio.h>
->  
+> 
 >  #define STLEN 10
->  
+> 
 >  int main(void){
 >      char words[STLEN];
 >      int i;
@@ -91,3 +91,61 @@ Note that this function is a bit different from **gets()** which discards the ne
 >      return 0;
 >  }
 > ```
+
+## 3. gets_s()
+
+### 3.1 Definition
+
+C11’s optional **gets_s()** function, like **fgets()**, uses an argument to limit the number of 
+characters read. 
+
+*gets_s(words, STLEN);*
+
+### 3.2 Behavior
+
+The three main differences from fgets() are these:
+
+1. **gets_s()** just reads from the standard input, so it doesn’t need a third argument.
+
+2. If **gets_s()** does read a newline; it discards it rather than storing it.
+
+3. If **gets_s()** reads the maximum number of characters and fails to read a newline, it 
+   takes several steps. It sets the first character of the destination array to the null character. It reads and discards subsequent input until a newline or end-of-file is encountered. It returns the null pointer. It invokes an implementation-dependent “handler” function (or else one you’ve selected), which may cause the program to exit or abort.
+
+### 3.3 Note
+
+The second feature means that, as long as the input line isn’t too long, **gets_s()** behaves like **gets()**, making it easier to replace **gets()** with **gets_s()** rather than with **fgets()**. The third feature means there’s a learning curve to using this function. Let’s compare the suitability of **gets()**, **fgets()**, and **gets_s()**. If the input line fits into the target storage, all three work fine. But **fgets()** does include the newline as part of the string, and you may need to provide code to replace it with a null character.
+
+What if the input line doesn’t fit? Then **gets()** isn’t safe; it can corrupt your data and compromise security. The **gets_s()** function is safe, but, if you don’t want the program to abort or otherwise exit, you’ll need to learn how to write and register special “handlers.” Also, if you manage to keep the program running, **gets_s()** disposes of the rest of the input line whether you want to or not. The **fgets()** function is the easiest to work with if the line doesn’t fit, and it leaves more choices up to you. 
+
+> **Comment:** So **gets_s()**, when input fails to meet expectations, is less convenient and flexible than **fgets()**. Perhaps that’s one reason that **gets_s()** is just an optional extension of the C library. And given that **gets_s()** is optional, using **fgets()** usually is the better choice.
+
+## Extra: s_gets()
+
+Read a whole line and replace the newline character with a null character, or read the part of a line that fits and discard the rest—sort of a **gets_s()** function without the extra baggage. No standard function meets that description, but we can create one. It’ll come in handy in later examples.
+
+```c
+ char* s_gets(char* dst, int n){
+        if(!dst)
+                return NULL;
+        char* res = fgets(dst, n, stdin);
+        int i = 0;
+        if(res){
+                while(dst[i] != '\n' && dst[i] != '\0')
+                        ++i;
+                if(dst[i] == '\n')
+                        dst[i] = '\0';
+                else{
+                        while(getchar() != '\n')
+                                continue;
+                }
+        }
+        return res;
+}
+```
+
+> **Note:** There are some flaws about this function.
+> 
+> 1. If it encounters the input that does not fit the buffer, it keeps silent and user will not be informed.
+> 
+> 2. It doesn't cope with the misuse situation such as setting n as 1 or less.
