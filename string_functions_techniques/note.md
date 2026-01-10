@@ -155,3 +155,57 @@ Read a whole line and replace the newline character with a null character, or re
 Definition ? Usage or bahavior? Note ? I think I do not need to repeat these content anymore. We are all familiar with this famous input function. I think I just need to present something we ought to note.
 
 **Comment:** **scanf()** uses *%s* format specifier to indicate it would like to read a string. BUT, rather than read a whole string line, it prefers to read a single word. It will start at the first non-space character and terminate at the first whitespace character it encounters (not including that whitespace character !!!). Also, if we indicates the field width such as *%5s*. Then it will just read the first 5 characters in the string or it will ends when it meets whitespace character, it depends on which comes first.
+
+## 5. strlen()
+
+### 5.1 Definition
+
+The **strlen()** function is usually used to calculate the length of a string. 
+
+### 5.2 Behavior
+
+This function ends with the null character, and return the size of the string which passed to it as argument.
+
+### 5.3 Note
+
+Just note that when the function meets null character, it is finished.
+
+> ```c
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <string.h>
+> 
+> int main(void){
+>         const char* str = "hello";
+>         printf("The length of str is: %lu\n", strlen(str));
+>         return 0;
+> }
+> ```
+
+## 6. strcat()
+
+### 6.1 Definition
+
+**strcat()** is used to concatenate the second string which is indicated in the second parameter to the first string which is indicated in the first parameter.
+
+### 6.2 Behavior
+
+Concatenate the second string in the second parameter to the first string in the first parameter. It will precedingly ends if it encounters the null character in the second string. Also, it will eliminate the null character in the first string and directly append the second string to there as the starting point.
+
+### 6.3 Note
+
+We must make sure the memory size is sufficient to contain both of them and an extra null character. Or it will cause buffer overflow problem just like **gets()**
+
+## 7. strncat()
+
+### 7.1 Definition
+
+**strncat()** is a safe edition of **strcat()**, it receives the third parameter as the maximum size of the second string appended to the first string, avoiding overflow problem.
+
+### 7.2 Behavior
+
+Concatenate the second string in the second parameter to the first string in the first parameter. It will precedingly ends if it encounters the null character in the second string or if it meets the maximum number in the third parameter, whichever comes first. Also, it will eliminate the null character in the first string and directly append the second string to there as the starting point.
+
+### 7.3 Note
+
+This edition of string concatenate function is safer. Recommend using it rather than **strcat()**.
