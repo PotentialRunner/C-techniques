@@ -209,3 +209,45 @@ Concatenate the second string in the second parameter to the first string in the
 ### 7.3 Note
 
 This edition of string concatenate function is safer. Recommend using it rather than **strcat()**.
+
+## 8. strcmp() and strncmp()
+
+### 8.1 Definition
+
+Both of them are used to compare two string contents to determine whether they are the same or not. 
+
+### 8.2 Behavior
+
+If the first string is less than the second string (alphabetical order), then it returns a negative value, or else return a positive value. If they are the same, it returns 0.
+
+### 8.3 Note
+
+Note that there is also a safer edition of this function **strncmp()**, it receives the third parameter as size, indicating the number of character in both strings it is going to compare.
+
+## 9. strcpy() and strncpy()
+
+### 9.1 Definition
+
+Both of them are used to copy the second string to the first string, in fact, it is a memory space which is used to store the contents of the second string.
+
+### 9.2 Behavior
+
+Copy the second string content to the first string (memory space), it won't modify the contents of the second string.
+
+### 9.3 Note
+
+Note that **strncpy()** is a safer edition of this function, whose third parameter indicates how many characters to copy in second string.
+
+## 10. sprintf()
+
+### 10.1 Definition
+
+In fact, it is almost the same as **printf()**, it just does not need to display the contents to our screen, it stores the contents in a sequence indicated by the first parameter.
+
+### 10.2 Behavior
+
+Like **printf()**, it stores the formatted string in the memory space which is indicated by its first parameter.
+
+### 10.3 Note
+
+Ummm...I do not know yet....
