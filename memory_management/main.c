@@ -1,9 +1,10 @@
 #include <stdio.h>
-
+#include <stdlib.h>
 
 int main(void){
-	register int a = 10;
-	int *p = &a;
-	printf("register int a is %d\n", a);
+	int *p = (int*)malloc(sizeof(int));
+	*p = 10;
+	printf("%d\n", *p);
+	free(p);
 	return 0;
 }
