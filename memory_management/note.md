@@ -28,13 +28,41 @@ The *register* keyword give a **propostion** to compiler to make a specific vari
 
 > Note: This keyword is not to require the compiler but to recommend the compiler to put the objects to registers. In fact, the compiler will consider if it is really suitable to adopt your opinion. Also, we can't get a register variable's address, because it is not in memory.
 
-## 4. malloc()
+## 4. volatile
 
-### 4.1 Definition
+The *volatile* keyword is used to notify the compiler not to optimize the variable, which means that the variable can be modified by other opponents such as hardware or ISR. Sometimes the compiler will optimize the code and put some variables in the register to accelerate the program running process. But this keyword will tell the compiler to access it via RAM every time.
+
+## 5. restrict
+
+The *restrict* keyword is a qualifier used on only pointers, it tells the compiler that this pointer is the only means to access the data it points to. So it enables the compiler to do optimizations on its access. 
+
+Note that we must guarantee the pointer is the only means to access the data, the compiler is not able to check it for us. If we disobey the rule, there may be errors.
+
+> Examples:
+> 
+> ```c
+>  void * memcpy(void * restrict s1, const void * restrict s2, size_t n);
+>  void * memmove(void * s1, const void * s2, size_t n);
+> ```
+
+This two C standard functions are used to copy data from s2 to s1. But we must guarantee that the memories in s1 and s2 are not overlapped, and the compiler will activate the optimazation such as pipeline to accelerate the coping process. And *memmove()* does not use *restrict* keyword, so it may be slower than *memcpy()*.
+
+## 6. _Atomic (C11)
+
+In C11 we can realize concurrent programming by using <threads.h> and <stdatomic.h>. _Atomic notifies the compiler that a variable should be access by only one thread, it can not be access by other threads at the same time. It also needs to use *atomic_store* macro to store the _Atomic data meanwhile. For example:
+
+```c
+ _Atomic int hogs; // hogs an atomic variable
+ atomic_store(&hogs, 12); // macro from stdatomic.h
+```
+
+## 7. malloc()
+
+### 7.1 Definition
 
 The **malloc()** function is used to allocate memory in heap area in the process. It is declared in head file <stdlib.h>.
 
-### 4.2 Behavior
+### 7.2 Behavior
 
 Allocate memory in the heap area dynamically, usually used to accomplish some complicated tasks which need advanced memory management. It receives the parameter indicates the number of bytes it is going to allocate for the program.
 
@@ -51,20 +79,20 @@ int main(void){
 }
 ```
 
-### 4.3 Note
+### 7.3 Note
 
 Note that this function may be failed to allocate the memory for us if there is not sufficient heap memories for us. Also, we must be aware of *memory leak* problem, which means we forget to call *free()* to deallocate the memory allocated by *malloc()*. Then we will no longer be able to access those memories because we lost the address of that chunk of memory...
 
-## 5. calloc()
+## 8. calloc()
 
-### 5.1 Definition
+### 8.1 Definition
 
 **calloc()** is similar to **malloc()**, which is used to allocate heap memory for our program.
 
-### 5.2 Behavior
+### 8.2 Behavior
 
 **calloc()** accepts two parameters, the first indicates how many cells we would like to allocate, while the second indicates how much size per cell. Then it will return the pointer to that chunk of memory. It may also failed to allocate memory if there is not sufficient heap memory for us, either.
 
-### 5.3 Note
+### 8.3 Note
 
 Note that this function will set all the bits to 0 for us automatically after allocating the memory for us. And the memory it allocates should also be deallocated by *free()*, too.
